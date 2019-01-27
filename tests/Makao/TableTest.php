@@ -8,61 +8,65 @@ use PHPUnit\Framework\TestCase;
 
 class TableTest extends TestCase
 {
-    public function testShouldCreateEmptyTable()
+
+    /**
+     * @var Table
+     */
+    private $tableUnderTest;
+
+    public function setUp()
     {
-        //Given
-        $tableUnderTest = new Table();
+        $this->tableUnderTest = new Table();
+    }
 
+
+    public function testShouldCreateEmptyTable() : void
+    {
         //When
-        $actual = $tableUnderTest->countPlayers();
-
+        $actual = $this->tableUnderTest->countPlayers();
 
         //Then
         $this->assertSame(0, $actual);
     }
 
-    public function testShouldAddOnePlayerToTabel()
+    public function testShouldAddOnePlayerToTable() :void
     {
         //Given
-        $tableUnderTest = new Table();
         $player = new Player();
 
         //When
-        $tableUnderTest->addPlayer($player);
-        $actual = $tableUnderTest->countPlayers();
+        $this->tableUnderTest->addPlayer($player);
+        $actual = $this->tableUnderTest->countPlayers();
 
         //Then
         $this->assertSame(1, $actual);
     }
 
-    public function testShouldReturnCountWhenIAddMannyPlayers()
+    public function testShouldReturnCountWhenIAddMannyPlayers() : void
     {
-        //Given
-        $tableUnderTest = new Table();
-
         //When
-        $tableUnderTest->addPlayer(new Player());
-        $tableUnderTest->addPlayer(new Player());
-        $actual = $tableUnderTest->countPlayers();
+        $this->tableUnderTest->addPlayer(new Player());
+        $this->tableUnderTest->addPlayer(new Player());
+        $actual = $this->tableUnderTest->countPlayers();
 
         //Then
         $this->assertSame(2, $actual);
     }
     
-    public function testShouldThrowTooManyPlayersAtTableExceptionWhenITryAddMoreThanFourPlayers()
+    public function testShouldThrowTooManyPlayersAtTableExceptionWhenITryAddMoreThanFourPlayers() : void
     {
         //Expect
         $this->expectException(ThrowTooManyPlayersAtTableException::class);
         $this->expectExceptionMessage('Max capacity is 4 players!');
 
         //Given
-        $tableUnderTest = new Table();
+        $this->tableUnderTest = new Table();
 
         //When
-        $tableUnderTest->addPlayer(new Player());
-        $tableUnderTest->addPlayer(new Player());
-        $tableUnderTest->addPlayer(new Player());
-        $tableUnderTest->addPlayer(new Player());
-        $tableUnderTest->addPlayer(new Player());
+        $this->tableUnderTest->addPlayer(new Player());
+        $this->tableUnderTest->addPlayer(new Player());
+        $this->tableUnderTest->addPlayer(new Player());
+        $this->tableUnderTest->addPlayer(new Player());
+        $this->tableUnderTest->addPlayer(new Player());
     }
 }

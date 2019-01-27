@@ -5,6 +5,7 @@ use Makao\Exception\ThrowTooManyPlayersAtTableException;
 
 class Table
 {
+    private const MAX_PLAYERS = 4;
     private $players = [];
 
     public function countPlayers() : int
@@ -14,8 +15,8 @@ class Table
 
     public function addPlayer(Player $player) : void
     {
-        if($this->countPlayers() == 4) {
-            throw new ThrowTooManyPlayersAtTableException('Max capacity is 4 players!');
+        if($this->countPlayers() === self::MAX_PLAYERS) {
+            throw new ThrowTooManyPlayersAtTableException(self::MAX_PLAYERS);
         }
 
         $this->players[] = $player;
