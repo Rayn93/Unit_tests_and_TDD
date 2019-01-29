@@ -5,6 +5,7 @@ namespace Test\Makao\Collection;
 use Makao\Card;
 use Makao\Collection\CardCollection;
 use Makao\Exception\CardNotFoundException;
+use Makao\Exception\MethodNotAllowException;
 use PHPUnit\Framework\TestCase;
 
 class CardCollectionTest extends TestCase
@@ -85,6 +86,62 @@ class CardCollectionTest extends TestCase
         $this->assertSame(0, $this->cardCollection->key());
         $this->assertTrue($this->cardCollection->valid());
 
+    }
+
+    public function testShouldGetFirstCardFromCardsCollectionAndRemoveItFromDeck()
+    {
+        //When
+        $firstCard = new Card();
+        $secondCard = new Card();
+        $this->cardCollection
+            ->addCard($firstCard)
+            ->addCard($secondCard);
+
+        //Then
+        $this->assertCount(2, $this->cardCollection);
+
+        $actualCard = $this->cardCollection->pickCard();
+
+        $this->assertCount(1, $this->cardCollection);
+        $this->assertSame($firstCard, $actualCard);
+        $this->assertSame($secondCard, $this->cardCollection[0]);
+
+    }
+
+    public function testShouldThrowCardNotFoundExceptionWhenPickMoreCardsThanInCollection()
+    {
+        //Expect
+        $this->expectException(CardNotFoundException::class);
+        $this->expectExceptionMessage('Card collection is empty');
+
+        //Given
+        $firstCard = new Card();
+        $secondCard = new Card();
+        $this->cardCollection
+            ->addCard($firstCard)
+            ->addCard($secondCard);
+
+        //When
+        $this->cardCollection->pickCard();
+        $this->cardCollection->pickCard();
+        $this->cardCollection->pickCard();
+
+        //Then
+    }
+
+    public function testShouldThrowMethodNotAllowExceptionWhenYouTryAddCardToColletionAsArray()
+    {
+        //Expect
+        $this->expectException(MethodNotAllowException::class);
+        $this->expectExceptionMessage('You can not add card to collection as Array. Use addCard method');
+
+        //Given
+        $card = new Card;
+
+        //When
+        $this->cardCollection[] = $card;
+
+        //Then
 
 
     }

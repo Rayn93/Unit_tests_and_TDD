@@ -3,8 +3,9 @@ namespace Makao\Collection;
 
 use Makao\Card;
 use Makao\Exception\CardNotFoundException;
+use Makao\Exception\MethodNotAllowException;
 
-class CardCollection implements \Countable, \Iterator
+class CardCollection implements \Countable, \Iterator, \ArrayAccess
 {
     private const FIRST_POSITION = 0;
 
@@ -30,15 +31,22 @@ class CardCollection implements \Countable, \Iterator
             throw new CardNotFoundException();
         }
 
-        return end($this->cards);
+        $pieckedCard = $this->offsetGet(self::FIRST_POSITION);
+        $this->offsetUnset(self::FIRST_POSITION);
+
+        $this->cards = array_values($this->cards);
+
+        return $pieckedCard;
+    }
+
+    private function removeLastCard() : void
+    {
+        array_shift($this->cards);
     }
 
 
     /**
-     * Return the current element
-     * @link https://php.net/manual/en/iterator.current.php
-     * @return mixed Can return any type.
-     * @since 5.0.0
+     * @inheritdoc
      */
     public function current() : ?Card
     {
@@ -46,10 +54,7 @@ class CardCollection implements \Countable, \Iterator
     }
 
     /**
-     * Move forward to next element
-     * @link https://php.net/manual/en/iterator.next.php
-     * @return void Any returned value is ignored.
-     * @since 5.0.0
+     * @inheritdoc
      */
     public function next() : void
     {
@@ -57,10 +62,7 @@ class CardCollection implements \Countable, \Iterator
     }
 
     /**
-     * Return the key of the current element
-     * @link https://php.net/manual/en/iterator.key.php
-     * @return mixed scalar on success, or null on failure.
-     * @since 5.0.0
+     * @inheritdoc
      */
     public function key() : int
     {
@@ -68,11 +70,7 @@ class CardCollection implements \Countable, \Iterator
     }
 
     /**
-     * Checks if current position is valid
-     * @link https://php.net/manual/en/iterator.valid.php
-     * @return boolean The return value will be casted to boolean and then evaluated.
-     * Returns true on success or false on failure.
-     * @since 5.0.0
+     * @inheritdoc
      */
     public function valid() : bool
     {
@@ -80,14 +78,43 @@ class CardCollection implements \Countable, \Iterator
     }
 
     /**
-     * Rewind the Iterator to the first element
-     * @link https://php.net/manual/en/iterator.rewind.php
-     * @return void Any returned value is ignored.
-     * @since 5.0.0
+     * @inheritdoc
      */
     public function rewind() : void
     {
         $this->position = self::FIRST_POSITION;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function offsetExists($offset) : bool
+    {
+        return isset($this->cards[$offset]);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function offsetGet($offset) : Card
+    {
+        return $this->cards[$offset];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function offsetSet($offset, $value)
+    {
+        throw new MethodNotAllowException('You can not add card to collection as Array. Use addCard method');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function offsetUnset($offset) : void
+    {
+        unset($this->cards[$offset]);
     }
 }
 
