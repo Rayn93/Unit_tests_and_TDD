@@ -16,13 +16,12 @@ class CardService
     {
         $deck = new CardCollection();
 
-        foreach (Card::values() as $value){
-            foreach (Card::colors() as $color){
+        foreach (Card::values() as $value) {
+            foreach (Card::colors() as $color) {
                 $deck->addCard(new Card($color, $value));
             }
         }
 
         return $deck;
     }
-
 }

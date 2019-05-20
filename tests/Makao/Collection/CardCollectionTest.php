@@ -63,13 +63,10 @@ class CardCollectionTest extends TestCase
 
     public function testShouldIterableOnCardCollection()
     {
-        //Expect
-
-
         //Given
         $card = new Card(Card::COLOR_CLUB, Card::VALUE_FIVE);
 
-        //When //Then
+        //When & Then
         $this->cardCollection->addCard($card);
 
         $this->assertSame($card, $this->cardCollection->current());
@@ -105,7 +102,6 @@ class CardCollectionTest extends TestCase
         $this->assertCount(1, $this->cardCollection);
         $this->assertSame($firstCard, $actualCard);
         $this->assertSame($secondCard, $this->cardCollection[0]);
-
     }
 
     public function testShouldThrowCardNotFoundExceptionWhenPickMoreCardsThanInCollection()
@@ -133,7 +129,7 @@ class CardCollectionTest extends TestCase
     {
         //Expect
         $this->expectException(MethodNotAllowException::class);
-        $this->expectExceptionMessage('You can not add card to collection as Array. Use addCard method');
+        $this->expectExceptionMessage('You can not add card to collection as Array. Use addCard() method');
 
         //Given
         $card = new Card(Card::COLOR_CLUB, Card::VALUE_FIVE);
@@ -152,15 +148,12 @@ class CardCollectionTest extends TestCase
             ->addCard($firstCard)
             ->addCard($secondCard);
 
-
         //When
         $this->cardCollection->shuffle();
 
         //Then
         $this->assertSame($secondCard, $this->cardCollection->pickCard());
         $this->assertSame($firstCard, $this->cardCollection->pickCard());
-
-
     }
 
 

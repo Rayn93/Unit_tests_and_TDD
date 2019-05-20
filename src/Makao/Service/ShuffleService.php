@@ -6,7 +6,7 @@ namespace Makao\Service;
  */
 class ShuffleService
 {
-    public function shuffle(array $data)
+    public function shuffle(array $data) : array
     {
         shuffle($data);
 
