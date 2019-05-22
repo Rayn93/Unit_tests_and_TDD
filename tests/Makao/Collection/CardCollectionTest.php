@@ -82,7 +82,6 @@ class CardCollectionTest extends TestCase
         $this->assertSame($card, $this->cardCollection->current());
         $this->assertSame(0, $this->cardCollection->key());
         $this->assertTrue($this->cardCollection->valid());
-
     }
 
     public function testShouldGetFirstCardFromCardsCollectionAndRemoveItFromDeck()
@@ -138,24 +137,18 @@ class CardCollectionTest extends TestCase
         $this->cardCollection[] = $card;
     }
 
-    public function testShouldShuffleCardsInCardCollection()
+    public function testShuldReturnCollectionAsArray()
     {
         //Given
-        $firstCard = new Card(Card::COLOR_CLUB, Card::VALUE_FIVE);
-        $secondCard = new Card(Card::COLOR_HEART, Card::VALUE_JACK);
-
-        $this->cardCollection
-            ->addCard($firstCard)
-            ->addCard($secondCard);
+        $cards = [
+            new Card(Card::COLOR_CLUB, Card::VALUE_FIVE),
+            new Card(Card::COLOR_HEART, Card::VALUE_TEN),
+        ];
 
         //When
-        $this->cardCollection->shuffle();
+        $actual = new CardCollection($cards);
 
         //Then
-        $this->assertSame($secondCard, $this->cardCollection->pickCard());
-        $this->assertSame($firstCard, $this->cardCollection->pickCard());
+        $this->assertEquals($cards, $actual->toArray());
     }
-
-
-
 }

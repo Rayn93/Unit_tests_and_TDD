@@ -9,8 +9,13 @@ class CardCollection implements \Countable, \Iterator, \ArrayAccess
 {
     private const FIRST_POSITION = 0;
 
-    private $cards = [];
+    private $cards;
     private $position = 0;
+
+    public function __construct(array $cards = [])
+    {
+        $this->cards = $cards;
+    }
 
     public function count() : int
     {
@@ -22,12 +27,11 @@ class CardCollection implements \Countable, \Iterator, \ArrayAccess
         $this->cards[] = $card;
 
         return $this;
-
     }
 
     public function pickCard() : Card
     {
-        if (empty($this->cards)){
+        if (empty($this->cards)) {
             throw new CardNotFoundException();
         }
 
@@ -104,7 +108,7 @@ class CardCollection implements \Countable, \Iterator, \ArrayAccess
     /**
      * @inheritdoc
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value) : void
     {
         throw new MethodNotAllowException('You can not add card to collection as Array. Use addCard() method');
     }
@@ -117,9 +121,9 @@ class CardCollection implements \Countable, \Iterator, \ArrayAccess
         unset($this->cards[$offset]);
     }
 
-    public function shuffle()
+    public function toArray() : array
     {
-        shuffle($this->cards);
+        return $this->cards;
     }
 
 }

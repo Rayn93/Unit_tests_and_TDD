@@ -12,5 +12,4 @@ class ShuffleService
 
         return $data;
     }
-
 }
