@@ -22,7 +22,7 @@ class CardServiceTest extends TestCase
         $this->cardServiceUnderTest = new CardService($this->shuffleServiceMock);
     }
 
-    public function testShouldAllowCreateNewCardCollection()
+    public function testShouldAllowCreateNewCardCollection() : CardCollection
     {
         //When
         $actual = $this->cardServiceUnderTest->createDeck();
@@ -30,7 +30,6 @@ class CardServiceTest extends TestCase
         //Then
         $this->assertInstanceOf(CardCollection::class, $actual);
         $this->assertCount(52, $actual);
-
         $i = 0;
 
         foreach (Card::values() as $value) {
@@ -40,28 +39,25 @@ class CardServiceTest extends TestCase
                 $i++;
             }
         }
+
+        return $actual;
     }
 
-    public function testShouldShuffleCardsInCardCollection()
+    /**
+     * @depends testShouldAllowCreateNewCardCollection
+     * @param CardCollection $cardCollection
+     */
+    public function testShouldShuffleCardsInCardCollection(CardCollection $cardCollection)
     {
-        //Given
-        $firstCard = new Card(Card::COLOR_CLUB, Card::VALUE_FIVE);
-        $secondCard = new Card(Card::COLOR_HEART, Card::VALUE_JACK);
-
         $this->shuffleServiceMock->expects($this->once())
             ->method('shuffle')
-            ->willReturn([$secondCard, $firstCard]);
-
-        $cardCollection = new CardCollection();
-        $cardCollection
-            ->addCard($firstCard)
-            ->addCard($secondCard);
+            ->willReturn(array_reverse($cardCollection->toArray()));
 
         //When
         $actual = $this->cardServiceUnderTest->shuffle($cardCollection);
 
         //Then
-        $this->assertSame($secondCard, $actual->pickCard());
-        $this->assertSame($firstCard, $actual->pickCard());
+        $this->assertNotEquals($cardCollection, $actual);
+        $this->assertEquals($cardCollection->pickCard(), $actual[51]);
     }
 }
