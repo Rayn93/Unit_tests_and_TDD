@@ -27,8 +27,20 @@ class Player
         return $this->name;
     }
 
-    public function getCard()
+    public function getCards() : CardCollection
     {
         return $this->cardCollection;
+    }
+
+    public function pickCard() : Card
+    {
+        return $this->getCards()->pickCard();
+    }
+
+    public function takeCard(CardCollection $cardCollection) : self
+    {
+        $this->cardCollection->addCard($cardCollection->pickCard());
+
+        return $this;
     }
 }

@@ -30,9 +30,25 @@ class PlayerTest extends TestCase
         $player = new Player('Andy', $cardCollection);
 
         //When
-        $actual = $player->getCard();
+        $actual = $player->getCards();
 
         //Then
         $this->assertEquals($cardCollection, $actual);
+    }
+
+    public function testShouldAllowPlayerTakeCardFromDeck() : void
+    {
+        //Given
+        $card = new Card(Card::COLOR_HEART, Card::VALUE_ACE);
+        $cardCollection = new CardCollection([$card]);
+        $player = new Player('Andy');
+
+        //When
+        $actual = $player->takeCard($cardCollection)->getCards();
+
+        //Then
+        $this->assertCount(0, $cardCollection);
+        $this->assertCount(1, $actual);
+        $this->assertEquals($card, $actual[0]);
     }
 }

@@ -32,7 +32,7 @@ class TableTest extends TestCase
     public function testShouldAddOnePlayerToTable() :void
     {
         //Given
-        $player = new Player();
+        $player = new Player('Rob');
 
         //When
         $this->tableUnderTest->addPlayer($player);
@@ -45,8 +45,8 @@ class TableTest extends TestCase
     public function testShouldReturnCountWhenIAddMannyPlayers() : void
     {
         //When
-        $this->tableUnderTest->addPlayer(new Player());
-        $this->tableUnderTest->addPlayer(new Player());
+        $this->tableUnderTest->addPlayer(new Player('Rob'));
+        $this->tableUnderTest->addPlayer(new Player('Tom'));
         $actual = $this->tableUnderTest->countPlayers();
 
         //Then
@@ -63,10 +63,10 @@ class TableTest extends TestCase
         $this->tableUnderTest = new Table();
 
         //When
-        $this->tableUnderTest->addPlayer(new Player());
-        $this->tableUnderTest->addPlayer(new Player());
-        $this->tableUnderTest->addPlayer(new Player());
-        $this->tableUnderTest->addPlayer(new Player());
-        $this->tableUnderTest->addPlayer(new Player());
+        $this->tableUnderTest->addPlayer(new Player('Rob'));
+        $this->tableUnderTest->addPlayer(new Player('Andy'));
+        $this->tableUnderTest->addPlayer(new Player('Max'));
+        $this->tableUnderTest->addPlayer(new Player('John'));
+        $this->tableUnderTest->addPlayer(new Player('Allen'));
     }
 }
