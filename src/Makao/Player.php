@@ -5,6 +5,8 @@ use Makao\Collection\CardCollection;
 
 class Player
 {
+    private const MAKAO = 'Makao';
+
     /**
      * @var string
      */
@@ -37,10 +39,17 @@ class Player
         return $this->getCards()->pickCard();
     }
 
-    public function takeCard(CardCollection $cardCollection) : self
+    public function takeCards(CardCollection $cardCollection, int $count = 1) : self
     {
-        $this->cardCollection->addCard($cardCollection->pickCard());
+        for ($i = 0; $i < $count; $i++) {
+            $this->cardCollection->addCard($cardCollection->pickCard());
+        }
 
         return $this;
+    }
+
+    public function sayMakao() : string
+    {
+        return self::MAKAO;
     }
 }
