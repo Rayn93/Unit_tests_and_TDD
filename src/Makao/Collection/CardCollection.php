@@ -29,6 +29,15 @@ class CardCollection implements \Countable, \Iterator, \ArrayAccess
         return $this;
     }
 
+    public function addCardCollection(CardCollection $cardCollection) : self
+    {
+        foreach (clone $cardCollection as $card) {
+            $this->addCard($card);
+        }
+
+        return $this;
+    }
+
     public function pickCard() : Card
     {
         if (empty($this->cards)) {

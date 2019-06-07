@@ -93,7 +93,21 @@ class TableTest extends TestCase
 
         //Then
         $this->assertSame($cards, $actual);
+    }
 
+    public function testShouldAddCardCollectionToCardDeckOnTable()
+    {
+        //Given
+        $cardCollection = new CardCollection([
+            new Card(Card::COLOR_SPADE, Card::VALUE_FIVE),
+            new Card(Card::COLOR_DIAMOND, Card::VALUE_JACK),
+        ]);
+
+        //When
+        $actual = $this->tableUnderTest->addCardCollectionToDeck($cardCollection);
+
+        //Then
+        $this->assertEquals($cardCollection, $actual->getCardDeck());
 
     }
 }
