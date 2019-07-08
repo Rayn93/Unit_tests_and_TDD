@@ -31,7 +31,6 @@ class CardCollectionTest extends TestCase
 
         //Then
         $this->assertCount(1, $this->cardCollection);
-
     }
 
     public function testShouldAddCartsInChain()
