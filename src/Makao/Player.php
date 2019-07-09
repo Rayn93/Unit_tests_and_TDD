@@ -34,9 +34,9 @@ class Player
         return $this->cardCollection;
     }
 
-    public function pickCard() : Card
+    public function pickCard(int $cardIndex = 0) : Card
     {
-        return $this->getCards()->pickCard();
+        return $this->getCards()->pickCard($cardIndex);
     }
 
     public function takeCards(CardCollection $cardCollection, int $count = 1) : self

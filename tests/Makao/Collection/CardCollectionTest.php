@@ -119,8 +119,24 @@ class CardCollectionTest extends TestCase
         $this->cardCollection->pickCard();
         $this->cardCollection->pickCard();
         $this->cardCollection->pickCard();
+    }
+
+    public function testShouldReturnChosenCardPickedFromCollection()
+    {
+        //Given
+        $firstCard = new Card(Card::COLOR_CLUB, Card::VALUE_FIVE);
+        $secondCard = new Card(Card::COLOR_HEART, Card::VALUE_TEN);
+        $this->cardCollection
+            ->addCard($firstCard)
+            ->addCard($secondCard);
+
+        //When
+        $actual = $this->cardCollection->pickCard(1);
 
         //Then
+        $this->assertSame($secondCard, $actual);
+
+
     }
 
     public function testShouldThrowMethodNotAllowExceptionWhenYouTryAddCardToColletionAsArray()

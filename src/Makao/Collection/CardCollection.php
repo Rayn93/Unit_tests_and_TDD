@@ -38,14 +38,14 @@ class CardCollection implements \Countable, \Iterator, \ArrayAccess
         return $this;
     }
 
-    public function pickCard() : Card
+    public function pickCard(int $cardIndex = self::FIRST_POSITION) : Card
     {
         if (empty($this->cards)) {
             throw new CardNotFoundException();
         }
 
-        $pieckedCard = $this->offsetGet(self::FIRST_POSITION);
-        $this->offsetUnset(self::FIRST_POSITION);
+        $pieckedCard = $this->offsetGet($cardIndex);
+        $this->offsetUnset($cardIndex);
 
         $this->cards = array_values($this->cards);
 
