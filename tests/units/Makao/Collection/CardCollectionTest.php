@@ -42,7 +42,6 @@ class CardCollectionTest extends TestCase
 
         //Then
         $this->assertCount(2, $this->cardCollection);
-
     }
 
     public function testShouldThrowCardNotFoundExceptionWhenPickCardFromEmptyCollection()
@@ -135,8 +134,6 @@ class CardCollectionTest extends TestCase
 
         //Then
         $this->assertSame($secondCard, $actual);
-
-
     }
 
     public function testShouldThrowMethodNotAllowExceptionWhenYouTryAddCardToColletionAsArray()
@@ -180,7 +177,5 @@ class CardCollectionTest extends TestCase
 
         //Then
         $this->assertEquals($cardCollection, $actual);
-
-
     }
 }

@@ -21,10 +21,10 @@ class Table
     private $playedCards;
 
 
-    public function __construct(CardCollection $cardDeck = null)
+    public function __construct(CardCollection $cardDeck = null, CardCollection $playedCards = null)
     {
         $this->cardDeck = $cardDeck ?? new CardCollection();
-        $this->playedCards = new CardCollection();
+        $this->playedCards = $playedCards ?? new CardCollection();
     }
 
     public function countPlayers() : int
