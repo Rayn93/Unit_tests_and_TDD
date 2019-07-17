@@ -2,6 +2,7 @@
 namespace Makao\Service;
 
 use Makao\Card;
+use Makao\Exception\CardNotFoundException;
 use Makao\Table;
 
 class CardActionService
@@ -31,7 +32,13 @@ class CardActionService
 
     private function cardTwoAction() : void
     {
-        $this->table->getCurrentPlayer()->takeCards($this->table->getCardDeck(), 2);
-        $this->table->finishRound();
+        $player = $this->table->getCurrentPlayer();
+
+        try {
+            $card = $player->pickCardByValue(CARD::VALUE_TWO);
+        } catch (CardNotFoundException $e) {
+            $this->table->getCurrentPlayer()->takeCards($this->table->getCardDeck(), 2);
+            $this->table->finishRound();
+        }
     }
 }

@@ -41,7 +41,7 @@ class CardCollection implements \Countable, \Iterator, \ArrayAccess
     public function pickCard(int $cardIndex = self::FIRST_POSITION) : Card
     {
         if (empty($this->cards)) {
-            throw new CardNotFoundException();
+            throw new CardNotFoundException('Card collection is empty');
         }
 
         $pieckedCard = $this->offsetGet($cardIndex);

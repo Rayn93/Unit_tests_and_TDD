@@ -43,6 +43,8 @@ class CardValidatorTest extends TestCase
      * @param Card $activeCard
      * @param Card $newCard
      * @param bool $excepted
+     *
+     * @throws CardDuplicationException
      */
     public function testShoulValidCards(Card $activeCard, Card $newCard, bool $excepted)
     {
