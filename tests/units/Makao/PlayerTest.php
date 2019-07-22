@@ -117,9 +117,58 @@ class PlayerTest extends TestCase
     public function testShouldReturnPickCardByValueWhenPlayerHasCorrectCard()
     {
         //Given
+        $card = new Card(Card::COLOR_HEART, Card::VALUE_TWO);
+        $player = new Player('Andy', new CardCollection([
+            $card,
+            new Card(Card::COLOR_SPADE, Card::VALUE_TWO)
+        ]));
+
+        //When
+        $actual = $player->pickCardByValue(Card::VALUE_TWO);
+
+        //Then
+        $this->assertSame($card, $actual);
+    }
+
+    public function testShouldReturnTrueWhenPlayerCanPlayRound()
+    {
+        //Given
+        $player = new Player('Andy');
+
+        //Then
+        $this->assertTrue($player->canPlayRound());
+    }
+
+    public function testShouldReturnFalseWhenPlayerCanNotPlayRound()
+    {
+        //Given
         $player = new Player('Andy');
 
         //When
-        $player->pickCardByValue(Card::VALUE_TWO);
+        $player->addRoundToSkip();
+
+        //Then
+        $this->assertFalse($player->canPlayRound());
+    }
+
+    public function testShouldSkipManyRoundAndBackToPlayAfter()
+    {
+        //Given
+        $player = new Player('Andy');
+
+        //When
+        $this->assertTrue($player->canPlayRound());
+
+        $player->addRoundToSkip(2);
+        $this->assertFalse($player->canPlayRound());
+        $this->assertSame(2, $player->getRoundToSkip());
+
+        $player->skipRound();
+        $this->assertFalse($player->canPlayRound());
+        $this->assertSame(1, $player->getRoundToSkip());
+
+        $player->skipRound();
+        $this->assertTrue($player->canPlayRound());
+        $this->assertSame(0, $player->getRoundToSkip());
     }
 }
