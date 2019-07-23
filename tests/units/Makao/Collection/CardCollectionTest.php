@@ -178,4 +178,31 @@ class CardCollectionTest extends TestCase
         //Then
         $this->assertEquals($cardCollection, $actual);
     }
+    
+    public function testShouldReturnLastCardFromCollectionWithoutPicking()
+    {
+        //Given
+        $lastCard = new Card(Card::COLOR_DIAMOND, Card::VALUE_JACK);
+        $cardCollection = new CardCollection([
+            new Card(Card::COLOR_SPADE, Card::VALUE_FIVE),
+            $lastCard,
+        ]);
+    
+        //When
+        $actual = $cardCollection->getLastCard();
+    
+        //Then
+        $this->assertEquals($lastCard, $actual);
+        $this->assertCount(2, $cardCollection);
+    }
+
+    public function testShouldThrowCardNotFoundExceptionWhenTryGetLastCardFromEmptyCollection()
+    {
+        //Expect
+        $this->expectException(CardNotFoundException::class);
+        $this->expectExceptionMessage('You can not get last card from empty collection');
+
+        //Given
+        $actual = $this->cardCollection->getLastCard();
+    }
 }

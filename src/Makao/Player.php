@@ -66,6 +66,23 @@ class Player
         throw new CardNotFoundException("Player has not card with value 2");
     }
 
+    public function pickCardsByValue(string $cardValue) : CardCollection
+    {
+        $collection = new CardCollection();
+
+        try {
+            while ($card = $this->pickCardByValue($cardValue)) {
+                $collection->addCard($card);
+            }
+        } catch (CardNotFoundException $e) {
+            if (0 === $collection->count()) {
+                throw $e;
+            }
+        }
+
+        return $collection;
+    }
+
     public function getRoundToSkip() : int
     {
         return $this->roundToSkip;

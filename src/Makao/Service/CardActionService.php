@@ -20,7 +20,7 @@ class CardActionService
         $this->table = $table;
     }
 
-    public function afterCard(Card $card) : void
+    public function afterCard(Card $card, string $request = null) : void
     {
         $this->table->finishRound();
 
@@ -33,6 +33,9 @@ class CardActionService
                 break;
             case Card::VALUE_FOUR:
                 $this->skipRound();
+                break;
+            case Card::VALUE_JACK:
+                $this->requestingCardValue($request);
                 break;
             default:
                 break;
@@ -72,6 +75,23 @@ class CardActionService
             $this->skipRound();
         } catch (CardNotFoundException $e) {
             $player->addRoundToSkip($this->actionCount - 1);
+            $this->table->finishRound();
+        }
+    }
+
+    private function requestingCardValue(string $cardValue) : void
+    {
+        $iteration = $this->table->countPlayers();
+
+        for ($i = 0; $i < $iteration; $i++) {
+            $player = $this->table->getCurrentPlayer();
+
+            try {
+                $cards = $player->pickCardsByValue($cardValue);
+                $this->table->getPlayedCards()->addCardCollection($cards);
+            } catch (CardNotFoundException $e) {
+                $player->takeCards($this->table->getCardDeck());
+            }
             $this->table->finishRound();
         }
     }
