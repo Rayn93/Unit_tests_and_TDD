@@ -37,6 +37,9 @@ class CardActionService
             case Card::VALUE_JACK:
                 $this->requestingCardValue($request);
                 break;
+            case Card::VALUE_KING:
+                $this->afterKing($card->getColor());
+                break;
             default:
                 break;
         }
@@ -94,5 +97,33 @@ class CardActionService
             }
             $this->table->finishRound();
         }
+    }
+
+    private function afterKing(string $color) : void
+    {
+        $this->actionCount += 5;
+
+        switch ($color) {
+            case Card::COLOR_HEART:
+                $this->afterKingHeart();
+                break;
+            case Card::COLOR_SPADE:
+                $this->afterKingSpade();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private function afterKingHeart() : void
+    {
+        $this->playerTakeCards($this->actionCount);
+    }
+
+    private function afterKingSpade() : void
+    {
+        $this->table->backRound();
+        $this->table->backRound();
+        $this->playerTakeCards($this->actionCount);
     }
 }

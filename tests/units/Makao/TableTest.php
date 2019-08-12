@@ -197,6 +197,34 @@ class TableTest extends TestCase
         $this->assertEquals($player1, $this->tableUnderTest->getCurrentPlayer());
         $this->assertEquals($player2, $this->tableUnderTest->getNextPlayer());
         $this->assertEquals($player3, $this->tableUnderTest->getPreviousPlayer());
+    }
 
+    public function testShouldAllowBackRound () : void
+    {
+        //Given
+        $player1 = new Player('Rob');
+        $player2 = new Player('Greg');
+        $player3 = new Player('Betty');
+
+        $this->tableUnderTest->addPlayer($player1);
+        $this->tableUnderTest->addPlayer($player2);
+        $this->tableUnderTest->addPlayer($player3);
+
+        //When & Then
+        $this->assertEquals($player1, $this->tableUnderTest->getCurrentPlayer());
+        $this->assertEquals($player2, $this->tableUnderTest->getNextPlayer());
+        $this->assertEquals($player3, $this->tableUnderTest->getPreviousPlayer());
+
+        $this->tableUnderTest->finishRound();
+
+        $this->assertEquals($player2, $this->tableUnderTest->getCurrentPlayer());
+        $this->assertEquals($player3, $this->tableUnderTest->getNextPlayer());
+        $this->assertEquals($player1, $this->tableUnderTest->getPreviousPlayer());
+
+        $this->tableUnderTest->backRound();
+
+        $this->assertEquals($player1, $this->tableUnderTest->getCurrentPlayer());
+        $this->assertEquals($player2, $this->tableUnderTest->getNextPlayer());
+        $this->assertEquals($player3, $this->tableUnderTest->getPreviousPlayer());
     }
 }

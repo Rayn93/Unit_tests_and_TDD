@@ -265,4 +265,33 @@ class CardActionServiceTest extends TestCase
         $this->assertSame($requestedCard, $this->table->getPlayedCards()->getLastCard());
         $this->assertSame($this->player2, $this->table->getCurrentPlayer());
     }
+
+    public function testShouldGiveNextPlayerFiveCardsWhenCardKingHeartWasDropped()
+    {
+        //Given
+        $card = new Card(Card::COLOR_HEART, Card::VALUE_KING);
+
+        //When
+        $this->cardActionServiceUnderTest->afterCard($card);
+
+        //Then
+        $this->assertCount(5, $this->player2->getCards());
+        $this->assertSame($this->player3, $this->table->getCurrentPlayer());
+    }
+
+    public function testShouldGivePreviousPlayerFiveCardsWhenCardKingSpadeWasDropped()
+    {
+        //Given
+        $card = new Card(Card::COLOR_SPADE, Card::VALUE_KING);
+
+        //When
+        $this->cardActionServiceUnderTest->afterCard($card);
+
+        //Then
+        $this->assertCount(5, $this->player3->getCards());
+        $this->assertSame($this->player1, $this->table->getCurrentPlayer());
+    }
 }
+
+
+//Damy i Króle 7:30
