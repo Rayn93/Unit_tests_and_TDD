@@ -55,15 +55,9 @@ class Player
         return self::MAKAO;
     }
 
-    public function pickCardByValue(string $value)
+    public function pickCardByValue(string $value) : Card
     {
-        foreach ($this->cardCollection as $index => $card) {
-            if ($card->getValue() === $value) {
-                return $this->pickCard($index);
-            }
-        }
-
-        throw new CardNotFoundException("Player has not card with value 2");
+        return $this->pickCardByValueAndColor($value);
     }
 
     public function pickCardsByValue(string $cardValue) : CardCollection
@@ -81,6 +75,23 @@ class Player
         }
 
         return $collection;
+    }
+
+    public function pickCardByValueAndColor(string $value, string $color = null) : Card
+    {
+        foreach ($this->cardCollection as $index => $card) {
+            if ($card->getValue() === $value && ($color === null || $color === $card->getColor())) {
+                return $this->pickCard($index);
+            }
+        }
+
+        $message = 'Player has not card with value ' . $value;
+
+        if ($color !== null) {
+            $message .= ' and color ' . $color;
+        }
+
+        throw new CardNotFoundException($message);
     }
 
     public function getRoundToSkip() : int

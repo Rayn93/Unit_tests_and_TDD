@@ -291,7 +291,64 @@ class CardActionServiceTest extends TestCase
         $this->assertCount(5, $this->player3->getCards());
         $this->assertSame($this->player1, $this->table->getCurrentPlayer());
     }
+
+    public function testShouldGiveCurrntPlayerTenCardsWhenCardKingHeartWasDroppedAndNextPlayerHasKingSpadeToDefence()
+    {
+        //Given
+        $card = new Card(Card::COLOR_HEART, Card::VALUE_KING);
+
+        $this->player2->getCards()->addCard(new Card(Card::COLOR_SPADE, Card::VALUE_KING));
+
+        //When
+        $this->cardActionServiceUnderTest->afterCard($card);
+
+        //Then
+        $this->assertCount(10, $this->player1->getCards());
+        $this->assertSame($this->player2, $this->table->getCurrentPlayer());
+    }
+
+    public function testShouldGiveCurrntPlayerTenCardsWhenCardKingSpadeWasDroppedAndNextPlayerHasKingHeartToDefence()
+    {
+        //Given
+        $card = new Card(Card::COLOR_SPADE, Card::VALUE_KING);
+
+        $this->player3->getCards()->addCard(new Card(Card::COLOR_HEART, Card::VALUE_KING));
+
+        //When
+        $this->cardActionServiceUnderTest->afterCard($card);
+
+        //Then
+        $this->assertCount(10, $this->player1->getCards());
+        $this->assertSame($this->player2, $this->table->getCurrentPlayer());
+    }
+
+    public function testShouldNotRunAnyActionForOtherKings()
+    {
+        //Given
+        $card = new Card(Card::COLOR_DIAMOND, Card::VALUE_KING);
+
+        //When
+        $this->cardActionServiceUnderTest->afterCard($card);
+
+        //Then
+        $this->assertCount(0, $this->player1->getCards());
+        $this->assertCount(0, $this->player2->getCards());
+        $this->assertCount(0, $this->player3->getCards());
+        $this->assertSame($this->player2, $this->table->getCurrentPlayer());
+    }
+
+    public function testShouldNotRunAnyActionForAnyNoActionCard()
+    {
+        //Given
+        $card = new Card(Card::COLOR_DIAMOND, Card::VALUE_FIVE);
+
+        //When
+        $this->cardActionServiceUnderTest->afterCard($card);
+
+        //Then
+        $this->assertCount(0, $this->player1->getCards());
+        $this->assertCount(0, $this->player2->getCards());
+        $this->assertCount(0, $this->player3->getCards());
+        $this->assertSame($this->player2, $this->table->getCurrentPlayer());
+    }
 }
-
-
-//Damy i Króle 7:30

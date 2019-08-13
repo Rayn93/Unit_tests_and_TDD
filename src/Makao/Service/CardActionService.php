@@ -117,13 +117,27 @@ class CardActionService
 
     private function afterKingHeart() : void
     {
-        $this->playerTakeCards($this->actionCount);
+        try {
+            $card = $this->table->getCurrentPlayer()->pickCardByValueAndColor(Card::VALUE_KING, Card::COLOR_SPADE);
+            $this->table->getPlayedCards()->addCard($card);
+            $this->table->finishRound();
+            $this->afterKing(Card::COLOR_SPADE);
+        } catch (CardNotFoundException $e) {
+            $this->playerTakeCards($this->actionCount);
+        }
     }
 
     private function afterKingSpade() : void
     {
         $this->table->backRound();
-        $this->table->backRound();
-        $this->playerTakeCards($this->actionCount);
+
+        try {
+            $card = $this->table->getPreviousPlayer()->pickCardByValueAndColor(Card::VALUE_KING, Card::COLOR_HEART);
+            $this->table->getPlayedCards()->addCard($card);
+            $this->afterKing(Card::COLOR_HEART);
+        } catch (CardNotFoundException $e) {
+            $this->table->backRound();
+            $this->playerTakeCards($this->actionCount);
+        }
     }
 }
